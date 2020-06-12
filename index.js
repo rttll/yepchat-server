@@ -1,8 +1,9 @@
 const express = require('express')
 const app = express();
-const bodyParser = require('body-parser');
 
-const controller = require('./controller')
+var controllerName = process.env.NODE_ENV === 'production' ? 'controller' : 'controller-dev'
+// controllerName = 'controller'
+const controller = require(`./${controllerName}`)
 
 const production = process.NODE_ENV === 'production';
 const origin = production ? process.env.origin : '*'
@@ -12,8 +13,7 @@ function cors(req, res) {
   res.header('Access-Control-Allow-Origin', origin);
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   
-  if (req.method == 'OPTIONS') {
-    console.log('options')  
+  if (req.method == 'OPTIONS') { 
     res.status(204).send('');
   }
   
@@ -24,42 +24,29 @@ function cors(req, res) {
   res.status(401)
 }
 
-// app.use(bodyParser);
-app.use(express.json()) // for parsing application/json
+app.use(express.json())
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", origin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
-
 // TODO authorization
-app.get('/messages', (req, res) => {
-  
+app.get('/index', async (req, res) => {
   cors(req, res)
-  var messages = controller.messages()
-  
-  res.json(messages)
-  
-})
-
-
-app.get('/', (req, res) => {
-
-  // cors(req, res)
-  var messages = controller.create({body: 'hi', user: 'foo'})
-  
-  res.json(messages)
-  
+  var records = await controller.index()
+  res.json(records)  
 })
 
 // TODO authorization
 app.post('/create', (req, res) => {
-
   controller.create(req.body)
   res.status(200).send('')
+})
 
+app.get('/', (req, res) => {
+  res.status(200).send('OK')
 })
 
 app.listen(9000, () => {

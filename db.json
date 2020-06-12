@@ -1,114 +1,28 @@
 {
-  "messages": [
+  "records": [
     {
-      "body": "hi",
-      "user": "bob",
-      "timestamp": 1591989622234
+      "id": "54282233933",
+      "fields": {
+        "body": "hi",
+        "user": "adrian"
+      },
+      "createdTime": 1592001309437
     },
     {
-      "body": "yes?",
-      "user": "adrian",
-      "timestamp": 1591989628637
+      "id": "40180602192",
+      "fields": {
+        "body": "hi",
+        "user": "adrian"
+      },
+      "createdTime": 1592001767720
     },
     {
-      "body": "<img />",
-      "user": "adrian",
-      "timestamp": 1591990090067
-    },
-    {
-      "body": "hi\n\nhow are you?",
-      "user": "adrian",
-      "timestamp": 1591990157032
-    },
-    {
-      "body": "hi how\nf\nf\nf\n",
-      "user": "adrian",
-      "timestamp": 1591991592534
-    },
-    {
-      "body": "f",
-      "user": "adrian",
-      "timestamp": 1591991691546
-    },
-    {
-      "body": "f",
-      "user": "adrian",
-      "timestamp": 1591991691835
-    },
-    {
-      "body": "f",
-      "user": "adrian",
-      "timestamp": 1591991692082
-    },
-    {
-      "body": "f",
-      "user": "adrian",
-      "timestamp": 1591991692329
-    },
-    {
-      "body": "f",
-      "user": "adrian",
-      "timestamp": 1591991692430
-    },
-    {
-      "body": "sdf",
-      "user": "adrian",
-      "timestamp": 1591991695412
-    },
-    {
-      "body": "sdf",
-      "user": "adrian",
-      "timestamp": 1591991698384
-    },
-    {
-      "body": "hi",
-      "user": "adrian",
-      "timestamp": 1591991711108
-    },
-    {
-      "body": "hi",
-      "user": "adrian",
-      "timestamp": 1591991712973
-    },
-    {
-      "body": "f\nf\nf\nf\nf",
-      "user": "adrian",
-      "timestamp": 1591991721617
-    },
-    {
-      "body": "hi!\n\nhow ya been?",
-      "user": "adrian",
-      "timestamp": 1591992037870
-    },
-    {
-      "body": "goo\n\nd\n\n!",
-      "user": "adrian",
-      "timestamp": 1591992077638
-    },
-    {
-      "body": "foo\n\n\n\n\nbar",
-      "user": "adrian",
-      "timestamp": 1591992143716
-    },
-    {
-      "body": "nicley don\n\n!\n\n\n\n....",
-      "user": "adrian",
-      "timestamp": 1591992437679
-    },
-    {
-      "body": "hi",
-      "user": "adrian",
-      "timestamp": 1591992462298
-    },
-    {
-      "body": "hi",
-      "user": "adrian",
-      "timestamp": 1591992703599
-    },
-    {
-      "body": "foo\nbar",
-      "user": "adrian",
-      "timestamp": 1591992877752
+      "id": "16107254199",
+      "fields": {
+        "body": "hi",
+        "user": "bob"
+      },
+      "createdTime": 1592001809040
     }
   ]
 }

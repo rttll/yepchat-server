@@ -1,33 +1,50 @@
 const pusher = require('./pusher')
 
-const low = require('lowdb')
-const FileSync = require('lowdb/adapters/FileSync')
-const adapter = new FileSync('db.json')
-const db = low(adapter)
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
-db.defaults({ messages: []}).write()
+const axios = require('axios').default;
+axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.AIRTABLE_KEY}`;
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-function messages() {
-  return db.get('messages')
+const table = `https://api.airtable.com/v0/${process.env.AIRTABLE_TABLE}/messages`
+
+async function index() {
+  try {
+    var response = await axios.get(table)
+    return response.data.records
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 function create(data) {
   
-  var entry = { 
-    body: data.body,
-    user: data.user,
-    timestamp: Date.now()
+  let postData = {
+    records: [
+      {
+        fields: {
+          user: data.user,
+          body: data.body
+        }
+      }
+    ]
   }
 
-  db.get('messages')
-    .push(entry)
-    .write() 
-        
-  pusher.trigger('my-channel', 'my-event', entry);
+  axios({
+    url: table,
+    method: 'POST', 
+    data: JSON.stringify(postData)
+  }).then((resp) => {
+    pusher.trigger('my-channel', 'my-event', postData.records[0]);
+  }).catch((err) => {
+    console.error('no send', err)
+  })
 
 }
 
 module.exports = {
-  create: create,
-  messages: messages
+  index: index,
+  create: create
 }
