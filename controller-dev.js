@@ -14,7 +14,7 @@ function index() {
 }
 
 function create(data) {
-  
+  console.log('create')
   var entry = { 
     id: `${Math.round(Math.random() * 100000000000)}`,
     fields: {
@@ -27,7 +27,8 @@ function create(data) {
   db.get('records')
     .push(entry)
     .write() 
-        
+  
+  console.log('pusher')
   pusher.trigger('my-channel', 'my-event', entry);
 
 }

@@ -49,6 +49,10 @@ app.get('/', (req, res) => {
   res.status(200).send('OK')
 })
 
-app.listen(9000, () => {
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 9000;
+}
+app.listen(port, () => {
   console.log('listening...')
 })

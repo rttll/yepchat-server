@@ -19,5 +19,8 @@
     "lowdb": "^1.0.0",
     "pusher": "^3.0.1",
     "pusher-js": "^6.0.3"
+  },
+  "engines": {
+    "node": "12.x"
   }
 }
