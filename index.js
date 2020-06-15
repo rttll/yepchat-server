@@ -4,10 +4,9 @@ const app = express();
 const production = process.NODE_ENV === 'production';
 
 var controllerName = production === 'production' ? 'controller' : 'controller-dev'
-// controllerName = 'controller'
+controllerName = 'controller'
 const controller = require(`./${controllerName}`)
 
-// const origin = production ? process.env.ORIGIN : '*'
 const origin = process.env.ORIGIN
 
 app.use(express.json())
