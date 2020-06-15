@@ -1,6 +1,6 @@
 var Pusher = require('pusher');
 
-if (process.env.NODE_ENV = 'development') {
+if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
 }
 

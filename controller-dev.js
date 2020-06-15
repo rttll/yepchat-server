@@ -1,7 +1,5 @@
 const pusher = require('./pusher')
 
-require('dotenv').config();
-
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 const adapter = new FileSync('db.json')
@@ -27,7 +25,6 @@ function create(data) {
     .push(entry)
     .write() 
   
-  console.log('pusher')
   pusher.trigger('my-channel', 'my-event', entry);
 
 }
