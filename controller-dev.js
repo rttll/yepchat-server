@@ -14,7 +14,6 @@ function index() {
 }
 
 function create(data) {
-  console.log('create')
   var entry = { 
     id: `${Math.round(Math.random() * 100000000000)}`,
     fields: {

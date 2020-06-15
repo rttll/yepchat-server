@@ -1,11 +1,15 @@
 var Pusher = require('pusher');
 
+if (process.env.NODE_ENV = 'development') {
+  require('dotenv').config();
+}
+
 var pusher = new Pusher({
-  appId: '1017845',
-  key: '209b4249941e93c213fd',
-  secret: 'ba126521aa37196e5c17',
-  cluster: 'us3',
-  encrypted: true
+  appId: process.env.PUSHER_APP_ID,
+  key: process.env.PUSHER_KEY,
+  secret: process.env.PUSHER_SECRET,
+  cluster: process.env.PUSHER_CLUSTER,
+  useTLS: true
 });
 
 module.exports = pusher
