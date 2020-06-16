@@ -66,7 +66,7 @@ function create(data) {
     .push(entry)
     .write() 
   
-    pusher.trigger('yepchat', 'new-chat', entry, data.socket);
+    pusher.trigger('private-yepchat', 'new-chat', entry, data.socket);
     return
   }
 
@@ -77,7 +77,7 @@ function create(data) {
     data: JSON.stringify(postData)
   }).then((resp) => {
     console.log(data.socket)
-    pusher.trigger('yepchat', 'new-chat', postData.records[0], data.socket);
+    pusher.trigger('private-yepchat', 'new-chat', postData.records[0], data.socket);
   }).catch((err) => {
     console.error('no send', err)
   })
