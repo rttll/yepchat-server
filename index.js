@@ -1,12 +1,15 @@
 const express = require('express')
 const app = express();
+const bodyParser = require('body-parser');
 
 const production = process.NODE_ENV === 'production';
-
-const controller = require(`./controller`)
-
 const origin = production ? process.env.ORIGIN : '*'
 
+const controller = require(`./controller`)
+const pusher = require('./pusher')
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json())
 app.use(function(req, res, next) {
 
@@ -17,6 +20,10 @@ app.use(function(req, res, next) {
 
   next();
 });
+
+app.get('/', (req, res) => {
+  res.status(200).send('OK')
+})
 
 // TODO authorization
 app.get('/index', async (req, res) => {
@@ -30,9 +37,13 @@ app.post('/create', (req, res) => {
   res.status(200).send('')
 })
 
-app.get('/', (req, res) => {
-  res.status(200).send('OK')
-})
+app.post('/pusher/auth', function(req, res) {
+  var socketId = req.body.socket_id;
+  var channel = req.body.channel_name;
+  console.log(socketId, channel)
+  var auth = pusher.authenticate(socketId, channel);
+  res.send(auth);
+});
 
 let port = process.env.PORT;
 if (port == null || port == "") {
