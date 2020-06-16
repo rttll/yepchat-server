@@ -1,43 +1,83 @@
 const pusher = require('./pusher')
+const production = process.NODE_ENV === 'production';
 
-if (process.env.NODE_ENV !== 'production') {
+let db;
+
+if (!production) {
   require('dotenv').config();
+  const low = require('lowdb')
+  const FileSync = require('lowdb/adapters/FileSync')
+  const adapter = new FileSync('db.json')
+  db = low(adapter)
+  db.defaults({ records: []}).write()
 }
 
-const axios = require('axios').default;
-axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.AIRTABLE_KEY}`;
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+if (production) {
+  const axios = require('axios').default;
+  axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.AIRTABLE_KEY}`;
+  axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-const table = `https://api.airtable.com/v0/${process.env.AIRTABLE_TABLE}/messages`
+  const table = `https://api.airtable.com/v0/${process.env.AIRTABLE_TABLE}/messages`
+}  
 
 async function index() {
+  // Dev
+  if (!production) {
+    return db.get('records')
+  }
+
+  // Production
   try {
     var response = await axios.get(table)
-    return response.data.records
+    return response.data.records.map(r => {
+      r
+    })
   } catch (error) {
     console.error(error)
   }
 }
 
 function create(data) {
-  
+
   let postData = {
     records: [
       {
         fields: {
-          user: data.user,
-          body: data.body
+          body: data.body,
+          user: {
+            name: data.user.name,            
+            avatar: data.user.avatar
+          }
         }
       }
     ]
   }
 
+  // Dev
+  if (!production) {
+
+    var entry = { 
+      id: `${Math.round(Math.random() * 100000000000)}`,
+      fields: postData.records[0].fields,
+      createdTime: Date.now()
+    }
+
+    db.get('records')
+    .push(entry)
+    .write() 
+  
+    pusher.trigger('yepchat', 'new-chat', entry, data.socket);
+    return
+  }
+
+  // Production
   axios({
     url: table,
     method: 'POST', 
     data: JSON.stringify(postData)
   }).then((resp) => {
-    pusher.trigger('my-channel', 'my-event', postData.records[0]);
+    console.log(data.socket)
+    pusher.trigger('yepchat', 'new-chat', postData.records[0], data.socket);
   }).catch((err) => {
     console.error('no send', err)
   })

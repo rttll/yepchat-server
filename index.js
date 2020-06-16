@@ -3,8 +3,7 @@ const app = express();
 
 const production = process.NODE_ENV === 'production';
 
-var controllerName = production ? 'controller' : 'controller-dev'
-const controller = require(`./${controllerName}`)
+const controller = require(`./controller`)
 
 const origin = production ? process.env.ORIGIN : '*'
 
@@ -22,7 +21,7 @@ app.use(function(req, res, next) {
 // TODO authorization
 app.get('/index', async (req, res) => {
   var records = await controller.index()
-  res.json(records)  
+  res.json(records)
 })
 
 // TODO authorization
@@ -40,5 +39,5 @@ if (port == null || port == "") {
   port = 9000;
 }
 app.listen(port, () => {
-  console.log('listening...')
+  console.log(`Listening on port ${port}... [${process.env.NODE_ENV}]`)
 })
