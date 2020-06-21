@@ -9,7 +9,7 @@ if (!production) {
   const FileSync = require('lowdb/adapters/FileSync')
   const adapter = new FileSync('db.json')
   db = low(adapter)
-  db.defaults({ records: []}).write()
+  db.defaults({ records: [], users: [] }).write()
 }
 
 if (production) {
@@ -76,8 +76,50 @@ function create(data) {
     method: 'POST', 
     data: JSON.stringify(postData)
   }).then((resp) => {
-    console.log(data.socket)
+    // console.log(data.socket)
     pusher.trigger('private-yepchat', 'new-chat', postData.records[0], data.socket);
+  }).catch((err) => {
+    console.error('no send', err)
+  })
+
+}
+
+function login(data) {
+
+  let postData = {
+    users: [
+      {
+        fields: {
+          name: data.name,
+          avatar: data.avatar
+        }
+      }
+    ]
+  }
+
+  // Dev
+  if (!production) {
+
+    var entry = { 
+      id: `${Math.round(Math.random() * 100000000000)}`,
+      fields: postData.users[0].fields,
+      createdTime: Date.now()
+    }
+
+    db.get('users')
+    .push(entry)
+    .write() 
+  
+    return
+  }
+
+  // Production
+  axios({
+    url: table,
+    method: 'POST', 
+    data: JSON.stringify(postData)
+  }).then((resp) => {
+    console.log('made login')
   }).catch((err) => {
     console.error('no send', err)
   })
@@ -86,5 +128,6 @@ function create(data) {
 
 module.exports = {
   index: index,
-  create: create
+  create: create,
+  login: login
 }

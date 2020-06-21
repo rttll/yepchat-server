@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express();
 const bodyParser = require('body-parser');
+const basicAuth = require('express-basic-auth')
 
 const production = process.NODE_ENV === 'production';
 const origin = production ? process.env.ORIGIN : '*'
@@ -11,15 +12,20 @@ const pusher = require('./pusher')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json())
-app.use(function(req, res, next) {
 
+app.use(function(req, res, next) {
   res.header('Content-Type','application/json');
   res.header("Access-Control-Allow-Origin", origin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-
   next();
 });
+
+// app.use(basicAuth({
+//   users: {
+//     'app': process.env.APP_PASSWORD
+//   }
+// }))
 
 app.get('/', (req, res) => {
   res.status(200).send('OK')
@@ -37,10 +43,15 @@ app.post('/create', (req, res) => {
   res.status(200).send('')
 })
 
+app.post('/login', (req, res) => {
+  controller.login(req.body)
+  res.status(200).send('')
+})
+
 app.post('/pusher/auth', function(req, res) {
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
-  console.log(socketId, channel)
+  // console.log(socketId, channel)
   var auth = pusher.authenticate(socketId, channel);
   res.send(auth);
 });
