@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', (req, res) => {
-  res.status(200).send('OK')
+  res.status(200).send(`OK [${process.NODE_ENV}]`)
 })
 
 // TODO authorization
