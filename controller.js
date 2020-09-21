@@ -113,15 +113,15 @@ function login(data) {
   }
   
   // Production
-  axios({
-    url: table,
-    method: 'POST', 
-    data: JSON.stringify(postData)
-  }).then((resp) => {
-    console.log('made login')
-  }).catch((err) => {
-    console.error('no send', err)
-  })
+  // axios({
+  //   url: table,
+  //   method: 'POST', 
+  //   data: JSON.stringify(postData)
+  // }).then((resp) => {
+  //   console.log('made login')
+  // }).catch((err) => {
+  //   console.error('no send', err)
+  // })
 
 }
 
