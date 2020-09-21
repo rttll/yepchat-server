@@ -46,8 +46,19 @@ app.post('/login', (req, res) => {
 app.post('/pusher/auth', function(req, res) {
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
-  // console.log(socketId, channel)
-  var auth = pusher.authenticate(socketId, channel);
+
+  if (channel === 'presence-yepchat') {
+    var presenceData = {
+      user_id: req.query.user_id.trim(),
+      user_info: {
+        name: req.query.username,
+        avatar: req.query.avatar
+      }
+    };
+    var auth = pusher.authenticate(socketId, channel, presenceData);
+  } else {
+    var auth = pusher.authenticate(socketId, channel);
+  }
   res.send(auth);
 });
 

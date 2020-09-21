@@ -109,10 +109,9 @@ function login(data) {
     db.get('users')
     .push(entry)
     .write() 
-  
     return
   }
-
+  
   // Production
   axios({
     url: table,
