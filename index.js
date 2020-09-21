@@ -2,7 +2,7 @@ const express = require('express')
 const app = express();
 const bodyParser = require('body-parser');
 
-const production = process.NODE_ENV === 'production';
+const production = process.env.NODE_ENV === 'production';
 const origin = production ? process.env.ORIGIN : '*'
 
 const controller = require(`./controller`)
@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', (req, res) => {
-  res.status(200).send(`OK [${process.NODE_ENV}]`)
+  res.status(200).send(`OK [${process.env.NODE_ENV}]`)
 })
 
 // TODO authorization
@@ -46,8 +46,19 @@ app.post('/login', (req, res) => {
 app.post('/pusher/auth', function(req, res) {
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
-  // console.log(socketId, channel)
-  var auth = pusher.authenticate(socketId, channel);
+
+  if (channel === 'presence-yepchat') {
+    var presenceData = {
+      user_id: req.query.user_id.trim(),
+      user_info: {
+        name: req.query.username,
+        avatar: req.query.avatar
+      }
+    };
+    var auth = pusher.authenticate(socketId, channel, presenceData);
+  } else {
+    var auth = pusher.authenticate(socketId, channel);
+  }
   res.send(auth);
 });
 

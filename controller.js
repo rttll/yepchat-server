@@ -1,5 +1,5 @@
 const pusher = require('./pusher')
-const production = process.NODE_ENV === 'production';
+const production = process.env.NODE_ENV === 'production';
 
 let db;
 
@@ -109,20 +109,19 @@ function login(data) {
     db.get('users')
     .push(entry)
     .write() 
-  
     return
   }
-
+  
   // Production
-  axios({
-    url: table,
-    method: 'POST', 
-    data: JSON.stringify(postData)
-  }).then((resp) => {
-    console.log('made login')
-  }).catch((err) => {
-    console.error('no send', err)
-  })
+  // axios({
+  //   url: table,
+  //   method: 'POST', 
+  //   data: JSON.stringify(postData)
+  // }).then((resp) => {
+  //   console.log('made login')
+  // }).catch((err) => {
+  //   console.error('no send', err)
+  // })
 
 }
 
