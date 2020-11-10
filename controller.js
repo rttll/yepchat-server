@@ -4,21 +4,21 @@ const axios = require('axios').default;
 
 let db;
 
-if (!production) {
-  require('dotenv').config();
-  const low = require('lowdb')
-  const FileSync = require('lowdb/adapters/FileSync')
-  const adapter = new FileSync('db.json')
-  db = low(adapter)
-  db.defaults({ records: [], users: [] }).write()
-}
+// if (!production) {
+//   require('dotenv').config();
+//   const low = require('lowdb')
+//   const FileSync = require('lowdb/adapters/FileSync')
+//   const adapter = new FileSync('db.json')
+//   db = low(adapter)
+//   db.defaults({ records: [], users: [] }).write()
+// }
 
-if (production) {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.AIRTABLE_KEY}`;
-  axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-  const table = `https://api.airtable.com/v0/${process.env.AIRTABLE_TABLE}/messages`
-}  
+axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.AIRTABLE_KEY}`;
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+const table = `https://api.airtable.com/v0/${process.env.AIRTABLE_TABLE}/messages`
+
 
 async function index() {
   // Dev
