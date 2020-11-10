@@ -26,6 +26,10 @@ app.get('/', (req, res) => {
   res.status(200).send(`OK [${process.env.NODE_ENV}]`)
 })
 
+app.get('/ping', (req, res) => {
+  res.json({foo: 'bar'})
+})
+
 // TODO authorization
 app.get('/index', async (req, res) => {
   var records = await controller.index()
