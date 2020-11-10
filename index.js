@@ -38,6 +38,7 @@ app.get('/index', async (req, res) => {
 
 // TODO authorization
 app.post('/create', (req, res) => {
+  console.log('app create')
   controller.create(req.body)
   res.status(200).send('')
 })

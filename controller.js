@@ -1,5 +1,6 @@
 const pusher = require('./pusher')
 const production = process.env.NODE_ENV === 'production';
+const axios = require('axios').default;
 
 let db;
 
@@ -13,7 +14,6 @@ if (!production) {
 }
 
 if (production) {
-  const axios = require('axios').default;
   axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.AIRTABLE_KEY}`;
   axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -38,6 +38,7 @@ async function index() {
 }
 
 function create(data) {
+  console.log('fn create')
 
   let postData = {
     records: [
@@ -70,17 +71,20 @@ function create(data) {
     return
   }
 
+  console.log(postData, data)
+
   // Production
-  axios({
-    url: table,
-    method: 'POST', 
-    data: JSON.stringify(postData)
-  }).then((resp) => {
-    // console.log(data.socket)
-    pusher.trigger('private-yepchat', 'new-chat', postData.records[0], data.socket);
-  }).catch((err) => {
-    console.error('no send', err)
-  })
+  pusher.trigger('private-yepchat', 'new-chat', postData.records[0], data.socket);
+  // axios({
+  //   url: table,
+  //   method: 'POST', 
+  //   data: JSON.stringify(postData)
+  // }).then((resp) => {
+  //   // console.log(data.socket)
+  //   pusher.trigger('private-yepchat', 'new-chat', postData.records[0], data.socket);
+  // }).catch((err) => {
+  //   console.error('no send', err)
+  // })
 
 }
 
