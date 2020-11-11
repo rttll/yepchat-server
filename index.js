@@ -3,7 +3,6 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const production = process.env.NODE_ENV === 'production';
-const origin = production ? process.env.ORIGIN : '*'
 
 const controller = require(`./controller`)
 const pusher = require('./pusher')
@@ -13,7 +12,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json())
 
 app.use(function(req, res, next) {
-
+  let origin;
+  if (production) {
+    if ( process.env.ORIGINS.split('_').indexOf(req.headers.origin) > -1 ) {
+      origin = req.headers.origin
+    }
+  } else {
+    origin = '*'
+  }
   res.header('Content-Type','application/json');
   res.header("Access-Control-Allow-Origin", origin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
